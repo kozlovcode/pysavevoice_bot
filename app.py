@@ -13,7 +13,7 @@ def send_welcome(message):
 def echo_all(message):
 	voice_id = message.voice.file_id
 	file_info = bot.get_file(message.voice.file_id)
-	file = requests.get('https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_info.file_path))
+	file = requests.get('https://api.telegram.org/file/bot{0}/{1}'.format(f'{TOKEN}', file_info.file_path))
 	open(f'{voice_id}.oga', 'wb').write(file.content)
 	os.rename(rf'{voice_id}.oga',rf'{voice_id}.mp3')
 	doc = open(f'{voice_id}.mp3', 'rb')

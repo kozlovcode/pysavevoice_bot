@@ -1,9 +1,12 @@
 import os
 import telebot
 import requests
+from flask import Flask, request
 
 TOKEN = os.environ['TOKEN']
 bot = telebot.TeleBot(TOKEN)
+
+server = Flask(__name__)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -21,4 +24,10 @@ def echo_all(message):
 	doc.close()
 	os.remove(f'{voice_id}.mp3')
 
-bot.polling()
+@server.route('/', methods=['POST'])
+def getMessage():
+	bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+	return "!", 200
+
+if __name__ == "__main__":
+	server.run()
